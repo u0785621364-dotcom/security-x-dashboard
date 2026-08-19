@@ -1,14 +1,17 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Security X Dashboard',
-  description: 'Control panel for Security X Discord protection',
+  title: 'Security X · Control Panel',
+  description: 'Anti-nuke, anti-raid, verification & recovery dashboard for Discord',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="bg-grid" aria-hidden />
+        {children}
+      </body>
     </html>
   );
 }
