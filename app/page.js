@@ -1,108 +1,108 @@
-import Link from 'next/link';
+'use client';
 
-export default function Home() {
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function LandingPage() {
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    try {
+      const auth = localStorage.getItem('sx_auth');
+      if (auth) {
+        const server = localStorage.getItem('sx_server');
+        router.replace(server ? '/dashboard' : '/select');
+        return;
+      }
+    } catch (_) {}
+    setReady(true);
+  }, [router]);
+
+  const login = () => {
+    localStorage.setItem(
+      'sx_auth',
+      JSON.stringify({ user: { id: '291490158', username: 'Kimon', discriminator: '0001' }, at: Date.now() })
+    );
+    router.push('/select');
+  };
+
+  if (!ready) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: 'var(--text-muted)' }}>
+        Loading…
+      </div>
+    );
+  }
+
   return (
-    <div className="shell">
-      <nav className="nav">
-        <div className="brand">
-          <div className="brand-mark">SX</div>
-          <div className="brand-sub">
-            <span>Security X</span>
+    <div className="landing">
+      <nav className="landing-nav">
+        <div className="logo">
+          <div className="logo-mark">SX</div>
+          <div>
+            Security X
             <small>Discord protection</small>
           </div>
         </div>
         <div className="cta-row">
-          <Link className="btn btn-ghost btn-sm" href="/dashboard">
-            Open panel
-          </Link>
+          <button type="button" className="btn btn-discord btn-sm" onClick={login}>
+            Login with Discord
+          </button>
         </div>
       </nav>
 
-      <div className="status-bar">
-        <span className="status-chip">
-          <span className="dot" />
-          <strong>Bot online</strong>
-        </span>
-        <span className="status-chip">
-          Protected servers · <strong>demo</strong>
-        </span>
-        <span className="status-chip">
-          OAuth · <strong>ready</strong>
-        </span>
-      </div>
-
-      <section className="hero">
-        <span className="pill on">● Live protection stack</span>
-        <h1>Watch. Block. Recover.</h1>
+      <section className="landing-hero">
+        <h1>Protect your Discord server from malicious bots.</h1>
         <p>
-          Security X stops unauthorized bots, raids, spam, invites and nuke tools.
-          Members verify via OAuth, structure restores after attacks, and every
-          action is logged.
+          Security X detects, blocks and neutralizes automated threats before they can damage
+          your community. Anti-bot, anti-raid, invite control and recovery — one control panel.
         </p>
         <div className="cta-row">
-          <Link className="btn btn-primary" href="/dashboard">
-            Go to control panel
-          </Link>
-          <a
-            className="btn btn-ghost"
-            href="https://discord.com/developers/applications"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Discord Developer Portal
+          <button type="button" className="btn btn-discord" onClick={login}>
+            Login with Discord
+          </button>
+          <a className="btn btn-ghost" href="#features">
+            Learn more
           </a>
         </div>
       </section>
 
-      <div className="grid stagger" style={{ marginTop: '0.5rem' }}>
-        <div className="card span-4">
-          <div className="card-icon">🛡</div>
-          <h3 style={{ marginTop: '0.75rem' }}>Anti-nuke & recovery</h3>
-          <p className="meta">
-            Mass deletes trigger ban + one-shot wipe and restore from baseline.
-            Channels and roles come back clean — no duplicates.
-          </p>
+      <section id="features" className="feature-grid">
+        <div className="feature-card">
+          <div className="feature-icon">🛡</div>
+          <h3>Anti-Bot Protection</h3>
+          <p>Unauthorized apps are kicked on join. Adder is logged; nuke-style bots flagged.</p>
         </div>
-        <div className="card span-4">
-          <div className="card-icon">🤖</div>
-          <h3 style={{ marginTop: '0.75rem' }}>Bot & spam shield</h3>
-          <p className="meta">
-            Unauthorized apps kicked. Mention spam, invites and same-text bursts
-            get timeouts. Staff gets pinged on app spam.
-          </p>
+        <div className="feature-card">
+          <div className="feature-icon">⚡</div>
+          <h3>Anti-Raid & Joins</h3>
+          <p>Join velocity limits, mass-join lockdown, and alt detection before the raid lands.</p>
         </div>
-        <div className="card span-4">
-          <div className="card-icon">🔐</div>
-          <h3 style={{ marginTop: '0.75rem' }}>OAuth verification</h3>
-          <p className="meta">
-            Community check via Discord OAuth. Flagged raid / cheat servers block
-            verify. Recheck and appeal paths included.
-          </p>
+        <div className="feature-card">
+          <div className="feature-icon">🔗</div>
+          <h3>Invite Protection</h3>
+          <p>Invite links deleted with optional timeout. Keep recruiting under your control.</p>
         </div>
-      </div>
+        <div className="feature-card">
+          <div className="feature-icon">📊</div>
+          <h3>Real-Time Monitoring</h3>
+          <p>Security events, severity, and outcomes in one activity stream and searchable logs.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-icon">🔧</div>
+          <h3>Automated Actions</h3>
+          <p>Kick, ban, timeout, and recovery workflows with clear permission boundaries.</p>
+        </div>
+        <div className="feature-card">
+          <div className="feature-icon">📝</div>
+          <h3>Threat Reporting</h3>
+          <p>Report bots, servers, or users with evidence. Rate-limited and review-ready.</p>
+        </div>
+      </section>
 
-      <div className="grid" style={{ marginTop: '1rem' }}>
-        <div className="card span-6 embed cyan">
-          <h4>Owner panel</h4>
-          <p>
-            Pick a server, toggle modules, review events, and run setup. Full
-            control over every guild the bot protects.
-          </p>
-          <div className="embed-footer">/security control · /security setup</div>
-        </div>
-        <div className="card span-6 embed green">
-          <h4>Staff access</h4>
-          <p>
-            Enter a Guild ID to view that server’s settings and adjust allowed
-            configs. Owner still owns destructive actions.
-          </p>
-          <div className="embed-footer">Guild ID required · read + limited write</div>
-        </div>
-      </div>
-
-      <footer className="footer">
-        <span>Security X · Dashboard on Vercel</span>
-        <Link href="/dashboard">Open dashboard →</Link>
+      <footer className="landing-footer">
+        Security X · Discord OAuth2 required · Owner or Administrator access only · Not affiliated with Discord
       </footer>
     </div>
   );
